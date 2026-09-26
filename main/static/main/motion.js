@@ -97,7 +97,7 @@ if (!reduceMotion) {
                 }
             });
         },
-        { rootMargin: "0px 0px -12% 0px", threshold: 0.16 }
+        { rootMargin: "18% 0px 18% 0px", threshold: 0.04 }
     );
 
     revealItems.forEach((item, index) => {

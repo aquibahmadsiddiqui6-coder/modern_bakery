@@ -8,7 +8,7 @@
 
     <title>Modern Tea & Modern Bakery | Since 1960</title>
 
-    <link rel="stylesheet" href="{% static 'main/style.css' %}?v=menu-catalog-1">
+    <link rel="stylesheet" href="{% static 'main/style.css' %}?v=mobile-gallery-1">
 
     <script>
         document.documentElement.classList.add("is-loading");
@@ -141,9 +141,9 @@
     </div>
 
 </section>
-<section class="homepage-media" data-reveal="section">
+<section class="homepage-media">
 
-    <div class="media-heading">
+    <div class="media-heading" data-reveal="media-heading">
 
         <p class="section-label">OUR BAKERY</p>
 
@@ -161,7 +161,7 @@
 
     {% if featured_videos %}
 
-        <div class="featured-videos" data-reveal="media-grid">
+        <div class="featured-videos">
 
             {% for media in featured_videos %}
 
@@ -526,5 +526,5 @@
     </footer>
 
 </body>
-<script type="module" src="{% static 'main/motion.js' %}?v=menu-catalog-1"></script>
+    <script type="module" src="{% static 'main/motion.js' %}?v=mobile-gallery-1"></script>
 </html>
