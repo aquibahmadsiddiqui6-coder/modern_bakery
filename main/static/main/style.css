@@ -602,6 +602,10 @@ h2 {
     transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+.menu-category-link {
+    text-decoration: none;
+}
+
 .menu-category:hover,
 .menu-category.is-active {
     border-color: #b77945;
@@ -749,6 +753,332 @@ h2 {
     font-size: 14px;
 }
 
+
+/* ---------- PASTRY PRODUCT PAGE ---------- */
+
+.pastries-page {
+    background: #fffaf3;
+}
+
+.pastries-navbar {
+    position: relative;
+}
+
+.pastries-hero {
+    padding: 120px 8% 90px;
+    background: #4a2b20;
+    color: #fffaf3;
+}
+
+.pastries-hero h1 {
+    max-width: 720px;
+    margin: 16px 0 20px;
+    color: #fffaf3;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(48px, 7vw, 88px);
+    line-height: 0.98;
+}
+
+.pastries-hero > p:not(.section-label) {
+    max-width: 560px;
+    color: #eadccc;
+    line-height: 1.7;
+}
+
+.pastry-products {
+    padding: 90px 8%;
+}
+
+.pastry-products-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 42px;
+}
+
+.pastry-products-heading h2 {
+    margin-top: 12px;
+}
+
+.pastry-product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+}
+
+.pastry-product-card {
+    overflow: hidden;
+    border: 1px solid #eadccc;
+    background: #fffdf9;
+    box-shadow: 0 12px 35px rgba(70, 45, 25, 0.08);
+}
+
+.pastry-product-image-wrap {
+    position: relative;
+    min-height: 230px;
+    background: #f2e6d7;
+}
+
+.pastry-product-placeholder {
+    width: 100%;
+    height: 230px;
+    object-fit: cover;
+}
+
+.pastry-product-placeholder {
+    display: grid;
+    place-items: center;
+    font-size: 68px;
+}
+
+.pastry-carousel {
+    position: relative;
+    height: 230px;
+    overflow: hidden;
+    touch-action: pan-y;
+}
+
+.pastry-carousel-track {
+    display: flex;
+    height: 100%;
+    transition: transform 320ms ease;
+    will-change: transform;
+}
+
+.pastry-carousel-slide {
+    flex: 0 0 100%;
+    height: 100%;
+}
+
+.pastry-carousel-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.pastry-carousel-arrow {
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+    display: grid;
+    width: 32px;
+    height: 32px;
+    place-items: center;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(43, 26, 19, 0.76);
+    color: #fffaf3;
+    font-size: 25px;
+    line-height: 1;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.pastry-carousel-arrow:hover,
+.pastry-carousel-arrow:focus-visible {
+    background: #3a2923;
+}
+
+.pastry-carousel-prev {
+    left: 12px;
+}
+
+.pastry-carousel-next {
+    right: 12px;
+}
+
+.pastry-carousel-dots {
+    position: absolute;
+    right: 0;
+    bottom: 12px;
+    left: 0;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+}
+
+.pastry-carousel-dots button {
+    display: grid;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    place-items: center;
+    border: 1px solid rgba(255, 250, 243, 0.9);
+    border-radius: 50%;
+    background: rgba(43, 26, 19, 0.62);
+    color: #fffaf3;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.pastry-carousel-dots button.is-active,
+.pastry-carousel-dots button:hover,
+.pastry-carousel-dots button:focus-visible {
+    background: #fffaf3;
+    color: #3a2923;
+}
+
+.pastry-carousel-thumbs {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
+    z-index: 2;
+    display: flex;
+    justify-content: flex-start;
+    gap: 7px;
+    pointer-events: none;
+}
+
+.pastry-carousel-thumbs button {
+    width: 42px;
+    height: 42px;
+    padding: 2px;
+    border: 2px solid transparent;
+    background: rgba(255, 250, 243, 0.88);
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.pastry-carousel-thumbs button.is-active,
+.pastry-carousel-thumbs button:hover,
+.pastry-carousel-thumbs button:focus-visible {
+    border-color: #b77945;
+}
+
+.pastry-carousel-thumbs img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.pastry-carousel-slide img {
+    cursor: zoom-in;
+}
+
+.product-image {
+    cursor: zoom-in;
+}
+
+.lightbox-open {
+    overflow: hidden;
+}
+
+.pastry-lightbox[hidden] {
+    display: none;
+}
+
+.pastry-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: grid;
+    place-items: center;
+    padding: 28px;
+}
+
+.pastry-lightbox-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(26, 17, 13, 0.86);
+}
+
+.pastry-lightbox-dialog {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    max-width: min(92vw, 900px);
+    max-height: 92vh;
+    place-items: center;
+}
+
+.pastry-lightbox-image {
+    display: block;
+    max-width: min(88vw, 860px);
+    max-height: 82vh;
+    border: 4px solid #fffaf3;
+    background: #fffaf3;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+    object-fit: contain;
+}
+
+.pastry-lightbox-close,
+.pastry-lightbox-arrow {
+    position: absolute;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: 50%;
+    background: #fffaf3;
+    color: #3a2923;
+    cursor: pointer;
+}
+
+.pastry-lightbox-close {
+    top: -18px;
+    right: -18px;
+    width: 38px;
+    height: 38px;
+    font-size: 25px;
+}
+
+.pastry-lightbox-arrow {
+    top: 50%;
+    width: 42px;
+    height: 42px;
+    font-size: 31px;
+    transform: translateY(-50%);
+}
+
+.pastry-lightbox-prev {
+    left: -21px;
+}
+
+.pastry-lightbox-next {
+    right: -21px;
+}
+
+.pastry-lightbox-caption {
+    margin-top: 12px;
+    color: #fffaf3;
+    font-size: 13px;
+    text-align: center;
+}
+
+.pastry-product-content {
+    padding: 24px;
+}
+
+.pastry-product-content h3 {
+    margin-bottom: 10px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 25px;
+}
+
+.pastry-product-content > p {
+    min-height: 48px;
+    color: #77685d;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.pastry-product-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.pastry-product-footer strong {
+    color: #3a2923;
+    font-size: 20px;
+}
 
 /* ---------- ABOUT ---------- */
 
@@ -1388,6 +1718,90 @@ footer p {
 }
 
 
+/* ---------- CAKE GALLERY ---------- */
+
+.cake-gallery {
+    padding: 100px 8%;
+    background: #f4ede4;
+}
+
+.cake-gallery-heading {
+    max-width: 700px;
+    margin-bottom: 48px;
+}
+
+.cake-gallery-heading h2 {
+    margin-bottom: 18px;
+}
+
+.cake-gallery-heading > p:not(.section-label) {
+    color: #75665c;
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+.cake-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.cake-card {
+    overflow: hidden;
+    background: #fffdf9;
+    box-shadow: 0 12px 35px rgba(70, 45, 25, 0.08);
+    transform: translateY(var(--depth-y, 0px));
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cake-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 45px rgba(70, 45, 25, 0.14);
+}
+
+.cake-card a {
+    display: block;
+    overflow: hidden;
+}
+
+.cake-card img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.cake-card:hover img {
+    transform: scale(1.035);
+}
+
+.cake-card-content {
+    padding: 18px 18px 20px;
+}
+
+.cake-card-content .section-label {
+    margin-bottom: 8px;
+    font-size: 10px;
+}
+
+.cake-card-content h3 {
+    margin-bottom: 8px;
+    font-size: 20px;
+}
+
+.cake-card-content p:not(.section-label) {
+    color: #75665c;
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+.cake-gallery-empty {
+    grid-column: 1 / -1;
+    color: #75665c;
+}
+
+
 /* ---------- FEATURED BAKERY VIDEO ---------- */
 
 .featured-video {
@@ -1538,6 +1952,23 @@ footer p {
     .media-card img,
     .media-card video {
         height: 250px;
+    }
+
+    .cake-gallery {
+        padding: 70px 6%;
+    }
+
+    .cake-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .cake-card-content {
+        padding: 14px;
+    }
+
+    .cake-card-content h3 {
+        font-size: 17px;
     }
 
     .featured-video {
@@ -1739,5 +2170,34 @@ footer p {
         animation-iteration-count: 1 !important;
         scroll-behavior: auto !important;
         transition-duration: 0.01ms !important;
+    }
+}
+
+@media (max-width: 900px) {
+    .pastry-product-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    .pastries-hero {
+        padding: 85px 7% 65px;
+    }
+
+    .pastries-hero h1 {
+        font-size: 52px;
+    }
+
+    .pastry-products {
+        padding: 70px 7%;
+    }
+
+    .pastry-products-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .pastry-product-grid {
+        grid-template-columns: 1fr;
     }
 }

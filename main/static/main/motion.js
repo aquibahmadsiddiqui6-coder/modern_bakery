@@ -10,6 +10,123 @@ const menuFilters = document.querySelectorAll("[data-menu-filter]");
 const menuCards = document.querySelectorAll("[data-menu-category]");
 const menuEmpty = document.querySelector("[data-menu-empty]");
 const menuCount = document.querySelector("[data-menu-count]");
+const lightbox = document.querySelector("[data-pastry-lightbox]");
+const lightboxImage = lightbox?.querySelector("[data-lightbox-image]");
+const lightboxCaption = lightbox?.querySelector("[data-lightbox-caption]");
+let lightboxItems = [];
+let lightboxIndex = 0;
+
+const showLightboxImage = (index) => {
+    if (!lightbox || !lightboxImage || !lightboxItems.length) return;
+    lightboxIndex = (index + lightboxItems.length) % lightboxItems.length;
+    lightboxImage.src = lightboxItems[lightboxIndex].src;
+    lightboxImage.alt = lightboxItems[lightboxIndex].alt;
+    if (lightboxCaption) lightboxCaption.textContent = lightboxItems[lightboxIndex].alt;
+};
+
+const closeLightbox = () => {
+    if (!lightbox) return;
+    lightbox.hidden = true;
+    lightbox.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("lightbox-open");
+};
+
+lightbox?.querySelectorAll("[data-lightbox-close]").forEach((trigger) => {
+    trigger.addEventListener("click", closeLightbox);
+});
+lightbox?.querySelector("[data-lightbox-prev]")?.addEventListener("click", () => showLightboxImage(lightboxIndex - 1));
+lightbox?.querySelector("[data-lightbox-next]")?.addEventListener("click", () => showLightboxImage(lightboxIndex + 1));
+document.addEventListener("keydown", (event) => {
+    if (!lightbox || lightbox.hidden) return;
+    if (event.key === "Escape") closeLightbox();
+    if (event.key === "ArrowLeft") showLightboxImage(lightboxIndex - 1);
+    if (event.key === "ArrowRight") showLightboxImage(lightboxIndex + 1);
+});
+
+document.querySelectorAll("[data-pastry-carousel]").forEach((carousel) => {
+    const track = carousel.querySelector("[data-carousel-track]");
+    const slides = [...carousel.querySelectorAll("[data-carousel-slide]")];
+    const dots = [...carousel.querySelectorAll("[data-carousel-dot]")];
+    const thumbnails = [...carousel.querySelectorAll("[data-carousel-thumb]")];
+    const previous = carousel.querySelector("[data-carousel-prev]");
+    const next = carousel.querySelector("[data-carousel-next]");
+    let current = 0;
+    let startX = null;
+
+    if (!track || slides.length < 2) return;
+
+    const showSlide = (index) => {
+        current = (index + slides.length) % slides.length;
+        track.style.transform = `translateX(-${current * 100}%)`;
+        slides.forEach((slide, slideIndex) => {
+            slide.classList.toggle("is-active", slideIndex === current);
+        });
+        dots.forEach((dot, dotIndex) => {
+            const isActive = dotIndex === current;
+            dot.classList.toggle("is-active", isActive);
+            dot.setAttribute("aria-current", isActive ? "true" : "false");
+        });
+        thumbnails.forEach((thumbnail, thumbnailIndex) => {
+            const isActive = thumbnailIndex === current;
+            thumbnail.classList.toggle("is-active", isActive);
+            thumbnail.setAttribute("aria-current", isActive ? "true" : "false");
+        });
+    };
+
+    slides.forEach((slide, slideIndex) => {
+        slide.querySelector("img")?.addEventListener("click", () => {
+            lightboxItems = slides.map((item) => {
+                const image = item.querySelector("img");
+                return { src: image.src, alt: image.alt };
+            });
+            showLightboxImage(slideIndex);
+            if (lightbox) {
+                lightbox.hidden = false;
+                lightbox.setAttribute("aria-hidden", "false");
+                document.body.classList.add("lightbox-open");
+            }
+        });
+    });
+
+    previous?.addEventListener("click", () => showSlide(current - 1));
+    next?.addEventListener("click", () => showSlide(current + 1));
+    dots.forEach((dot) => {
+        dot.addEventListener("click", () => showSlide(Number(dot.dataset.carouselDot)));
+    });
+    thumbnails.forEach((thumbnail) => {
+        thumbnail.addEventListener("click", () => showSlide(Number(thumbnail.dataset.carouselThumb)));
+    });
+
+    carousel.addEventListener("keydown", (event) => {
+        if (event.key === "ArrowLeft") showSlide(current - 1);
+        if (event.key === "ArrowRight") showSlide(current + 1);
+    });
+
+    carousel.addEventListener("pointerdown", (event) => {
+        startX = event.clientX;
+    });
+    carousel.addEventListener("pointerup", (event) => {
+        if (startX === null) return;
+        const distance = event.clientX - startX;
+        if (Math.abs(distance) > 45) showSlide(current + (distance < 0 ? 1 : -1));
+        startX = null;
+    });
+    carousel.addEventListener("pointercancel", () => {
+        startX = null;
+    });
+});
+
+document.querySelectorAll("[data-product-image]").forEach((image) => {
+    image.addEventListener("click", () => {
+        lightboxItems = [{ src: image.src, alt: image.alt }];
+        showLightboxImage(0);
+        if (lightbox) {
+            lightbox.hidden = false;
+            lightbox.setAttribute("aria-hidden", "false");
+            document.body.classList.add("lightbox-open");
+        }
+    });
+});
 
 knowMoreTrigger?.addEventListener("click", () => {
     if (!aboutMore) return;

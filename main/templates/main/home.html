@@ -8,7 +8,7 @@
 
     <title>Modern Tea & Modern Bakery | Since 1960</title>
 
-    <link rel="stylesheet" href="{% static 'main/style.css' %}?v=mobile-gallery-1">
+    <link rel="stylesheet" href="{% static 'main/style.css' %}?v=cake-gallery-1">
 
     <script>
         document.documentElement.classList.add("is-loading");
@@ -54,6 +54,7 @@
         <nav>
             <a href="#">Home</a>
             <a href="#menu">Menu</a>
+            <a href="#cake-gallery">Cakes</a>
             <a href="#about">About</a>
             <a href="#branches">Branches</a>
             <a href="#contact">Contact</a>
@@ -89,7 +90,7 @@
         </div>
 
        <div class="hero-image" data-parallax="hero-image">
-    <img src="{% static 'main/images/shop.jpg' %}" alt="Modern Tea & Modern Bakery">
+    <img src="{% static 'main/images/shop-front.jpeg' %}" alt="Modern Tea & Modern Bakery storefront">
 </div>
 
     </section>
@@ -284,6 +285,50 @@
 </section>
 
 
+<section class="cake-gallery" id="cake-gallery" data-reveal="section">
+
+    <div class="cake-gallery-heading">
+
+        <p class="section-label">CAKE GALLERY</p>
+
+        <h2>Made for your sweetest moments.</h2>
+
+        <p>
+            Explore celebration cakes, custom designs and colourful themed creations
+            made at Modern Tea &amp; Modern Bakery.
+        </p>
+
+    </div>
+
+    <div class="cake-grid">
+
+        {% for media in cake_media %}
+
+            <article class="cake-card" data-reveal="media-card" data-reveal-loop data-depth>
+
+                {% if media.image %}
+                    <a href="{{ media.image.url }}" target="_blank" rel="noopener" aria-label="View {{ media.title }}">
+                        <img src="{{ media.image.url }}" alt="{{ media.title }}">
+                    </a>
+                {% endif %}
+
+                <div class="cake-card-content">
+                    <p class="section-label">CUSTOM CAKE</p>
+                    <h3>{{ media.title }}</h3>
+                    <p>{{ media.description }}</p>
+                </div>
+
+            </article>
+
+        {% empty %}
+            <p class="cake-gallery-empty">Cake gallery photos will appear here soon.</p>
+        {% endfor %}
+
+    </div>
+
+</section>
+
+
     <!-- MENU -->
 <section class="menu" id="menu" data-reveal="section">
 
@@ -298,6 +343,11 @@
 
     <div class="menu-categories" role="tablist" aria-label="Menu categories">
         {% for category in menu_categories %}
+            {% if category.slug == "cakes" %}
+            <a class="menu-category menu-category-link" href="{% url 'cakes' %}">
+            {% elif category.slug == "pastries" %}
+            <a class="menu-category menu-category-link" href="{% url 'pastries' %}">
+            {% else %}
             <button
                 type="button"
                 class="menu-category{% if forloop.first %} is-active{% endif %}"
@@ -305,12 +355,17 @@
                 role="tab"
                 aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
             >
+            {% endif %}
                 <span class="menu-category-icon" aria-hidden="true">{{ category.icon }}</span>
                 <span class="menu-category-copy">
                     <strong>{{ category.name }}</strong>
                     <small>{{ category.hint }}</small>
                 </span>
+            {% if category.slug == "cakes" or category.slug == "pastries" %}
+            </a>
+            {% else %}
             </button>
+            {% endif %}
         {% endfor %}
     </div>
 
@@ -327,6 +382,7 @@
                             src="{{ product.image.url }}"
                             alt="{{ product.name }}"
                             class="product-image"
+                            data-product-image
                         >
                     {% else %}
                         <div class="menu-icon">🍰</div>
@@ -531,6 +587,18 @@
 
     </footer>
 
+    <div class="pastry-lightbox" data-pastry-lightbox hidden aria-hidden="true">
+        <div class="pastry-lightbox-backdrop" data-lightbox-close></div>
+        <div class="pastry-lightbox-dialog" role="dialog" aria-modal="true" aria-label="Product photo viewer">
+            <button class="pastry-lightbox-close" type="button" data-lightbox-close aria-label="Close photo viewer">×</button>
+            <button class="pastry-lightbox-arrow pastry-lightbox-prev" type="button" data-lightbox-prev aria-label="Previous product photo">‹</button>
+            <img class="pastry-lightbox-image" data-lightbox-image alt="">
+            <button class="pastry-lightbox-arrow pastry-lightbox-next" type="button" data-lightbox-next aria-label="Next product photo">›</button>
+            <p class="pastry-lightbox-caption" data-lightbox-caption></p>
+        </div>
+    </div>
+
 </body>
     <script type="module" src="{% static 'main/motion.js' %}?v=mobile-gallery-1"></script>
+    <script src="{% static 'main/lightbox.js' %}?v=product-lightbox-1"></script>
 </html>

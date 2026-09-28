@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cake Gallery | Modern Tea &amp; Modern Bakery</title>
+    <link rel="stylesheet" href="{% static 'main/style.css' %}?v=cake-gallery-1">
+</head>
+<body class="pastries-page cakes-page">
+
+    <header class="navbar pastries-navbar">
+        <a class="logo" href="{% url 'home' %}">
+            <span>MODERN</span>
+            <small>TEA &amp; BAKERY</small>
+        </a>
+
+        <nav aria-label="Main navigation">
+            <a href="{% url 'home' %}#menu">Menu</a>
+            <a href="{% url 'home' %}#cake-gallery">Cakes</a>
+            <a href="{% url 'home' %}#about">About</a>
+            <a href="{% url 'home' %}#contact">Contact</a>
+        </nav>
+
+        <a href="{% url 'home' %}#contact" class="nav-button">Order Enquiry</a>
+    </header>
+
+    <main>
+        <section class="pastries-hero cakes-hero">
+            <p class="section-label">CAKE GALLERY</p>
+            <h1>Made for your sweetest moments.</h1>
+            <p>Explore celebration cakes, custom designs and colourful themed creations made at Modern Tea &amp; Modern Bakery.</p>
+        </section>
+
+        <section class="cake-gallery cake-products-section" aria-labelledby="all-cakes-title">
+            <div class="pastry-products-heading cake-products-heading">
+                <div>
+                    <p class="section-label">CUSTOM CAKES</p>
+                    <h2 id="all-cakes-title">Choose your celebration style.</h2>
+                </div>
+                <a class="secondary-btn" href="{% url 'home' %}#menu">Back to Menu</a>
+            </div>
+
+            <div class="cake-grid">
+                {% for media in cake_media %}
+                    <article class="cake-card" data-reveal="media-card">
+                        {% if media.image %}
+                            <a href="{{ media.image.url }}" target="_blank" rel="noopener" aria-label="View {{ media.title }}">
+                                <img src="{{ media.image.url }}" alt="{{ media.title }}">
+                            </a>
+                        {% endif %}
+                        <div class="cake-card-content">
+                            <p class="section-label">CUSTOM CAKE</p>
+                            <h3>{{ media.title }}</h3>
+                            <p>{{ media.description }}</p>
+                        </div>
+                    </article>
+                {% empty %}
+                    <p class="cake-gallery-empty">Cake gallery photos will appear here soon.</p>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div>
+            <h3>MODERN TEA &amp; MODERN BAKERY</h3>
+            <p>Since 1960</p>
+        </div>
+        <p>Freshly made for Lucknow.</p>
+    </footer>
+
+    <script type="module" src="{% static 'main/motion.js' %}?v=cake-page-1"></script>
+</body>
+</html>

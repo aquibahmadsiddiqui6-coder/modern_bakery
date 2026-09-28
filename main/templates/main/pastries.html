@@ -1,0 +1,135 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fresh Pastries | Modern Tea &amp; Modern Bakery</title>
+    <link rel="stylesheet" href="{% static 'main/style.css' %}?v=cake-gallery-1">
+</head>
+<body class="pastries-page">
+
+    <header class="navbar pastries-navbar">
+        <a class="logo" href="{% url 'home' %}">
+            <span>MODERN</span>
+            <small>TEA &amp; BAKERY</small>
+        </a>
+
+        <nav aria-label="Main navigation">
+            <a href="{% url 'home' %}#menu">Menu</a>
+            <a href="{% url 'home' %}#cake-gallery">Cakes</a>
+            <a href="{% url 'home' %}#about">About</a>
+            <a href="{% url 'home' %}#contact">Contact</a>
+        </nav>
+
+        <a href="{% url 'home' %}#contact" class="nav-button">Order Enquiry</a>
+    </header>
+
+    <main>
+        <section class="pastries-hero">
+            <p class="section-label">FRESH FROM THE COUNTER</p>
+            <h1>Pastries made for the moment.</h1>
+            <p>Choose a favourite, then open its gallery to see every available finish and variation.</p>
+        </section>
+
+        <section class="pastry-products" aria-labelledby="pastry-products-title">
+            <div class="pastry-products-heading">
+                <div>
+                    <p class="section-label">PASTRIES</p>
+                    <h2 id="pastry-products-title">Pick your sweet favourite.</h2>
+                </div>
+                <a class="secondary-btn" href="{% url 'home' %}#menu">Back to Menu</a>
+            </div>
+
+            <div class="pastry-product-grid">
+                {% for product in pastry_products %}
+                    <article class="pastry-product-card" data-reveal="menu-card">
+                        <div class="pastry-product-image-wrap">
+                            {% with gallery_count=product.images.count %}
+                                {% if product.image or gallery_count %}
+                                    <div class="pastry-carousel" data-pastry-carousel tabindex="0" aria-label="{{ product.name }} photos">
+                                        <div class="pastry-carousel-track" data-carousel-track>
+                                            {% if product.image %}
+                                                <div class="pastry-carousel-slide is-active" data-carousel-slide>
+                                                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                                                </div>
+                                            {% endif %}
+                                            {% for photo in product.images.all %}
+                                                <div class="pastry-carousel-slide{% if not product.image and forloop.first %} is-active{% endif %}" data-carousel-slide>
+                                                    <img src="{{ photo.image.url }}" alt="{{ photo.alt_text|default:product.name }}">
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+
+                                        {% if product.image or gallery_count > 1 %}
+                                            <button class="pastry-carousel-arrow pastry-carousel-prev" type="button" data-carousel-prev aria-label="Previous {{ product.name }} photo">‹</button>
+                                            <button class="pastry-carousel-arrow pastry-carousel-next" type="button" data-carousel-next aria-label="Next {{ product.name }} photo">›</button>
+                                            <div class="pastry-carousel-dots" data-carousel-dots aria-label="Choose a {{ product.name }} photo">
+                                                {% if product.image %}
+                                                    <button class="is-active" type="button" data-carousel-dot="0" aria-label="Photo 1" aria-current="true">1</button>
+                                                {% endif %}
+                                                {% for photo in product.images.all %}
+                                                    <button type="button" data-carousel-dot="{% if product.image %}{{ forloop.counter }}{% else %}{{ forloop.counter0 }}{% endif %}" aria-label="Photo {% if product.image %}{{ forloop.counter|add:1 }}{% else %}{{ forloop.counter }}{% endif %}">{% if product.image %}{{ forloop.counter|add:1 }}{% else %}{{ forloop.counter }}{% endif %}</button>
+                                                {% endfor %}
+                                            </div>
+                                            <div class="pastry-carousel-thumbs" aria-label="Preview {{ product.name }} photos">
+                                                {% if product.image %}
+                                                    <button class="is-active" type="button" data-carousel-thumb="0" aria-label="Open photo 1" aria-current="true">
+                                                        <img src="{{ product.image.url }}" alt="">
+                                                    </button>
+                                                {% endif %}
+                                                {% for photo in product.images.all %}
+                                                    <button type="button" data-carousel-thumb="{% if product.image %}{{ forloop.counter }}{% else %}{{ forloop.counter0 }}{% endif %}" aria-label="Open photo {% if product.image %}{{ forloop.counter|add:1 }}{% else %}{{ forloop.counter }}{% endif %}">
+                                                        <img src="{{ photo.image.url }}" alt="">
+                                                    </button>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% else %}
+                                    <div class="pastry-product-placeholder" aria-hidden="true">🥐</div>
+                                {% endif %}
+                            {% endwith %}
+                        </div>
+
+                        <div class="pastry-product-content">
+                            <span class="product-category">{{ product.get_category_display }}</span>
+                            <h3>{{ product.name }}</h3>
+                            <p>{{ product.description }}</p>
+                            <div class="pastry-product-footer">
+                                <strong>₹{{ product.price }}</strong>
+                                <a href="{% url 'home' %}#contact" class="product-order-link">Enquire <span aria-hidden="true">↗</span></a>
+                            </div>
+                        </div>
+
+                    </article>
+                {% empty %}
+                    <p class="no-products">Our pastry counter is being prepared. Please check back soon.</p>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div>
+            <h3>MODERN TEA &amp; MODERN BAKERY</h3>
+            <p>Since 1960</p>
+        </div>
+        <p>Freshly made for Lucknow.</p>
+    </footer>
+
+    <div class="pastry-lightbox" data-pastry-lightbox hidden aria-hidden="true">
+        <div class="pastry-lightbox-backdrop" data-lightbox-close></div>
+        <div class="pastry-lightbox-dialog" role="dialog" aria-modal="true" aria-label="Product photo viewer">
+            <button class="pastry-lightbox-close" type="button" data-lightbox-close aria-label="Close photo viewer">×</button>
+            <button class="pastry-lightbox-arrow pastry-lightbox-prev" type="button" data-lightbox-prev aria-label="Previous product photo">‹</button>
+            <img class="pastry-lightbox-image" data-lightbox-image alt="">
+            <button class="pastry-lightbox-arrow pastry-lightbox-next" type="button" data-lightbox-next aria-label="Next product photo">›</button>
+            <p class="pastry-lightbox-caption" data-lightbox-caption></p>
+        </div>
+    </div>
+
+    <script type="module" src="{% static 'main/motion.js' %}?v=pastry-carousel-1"></script>
+    <script src="{% static 'main/lightbox.js' %}?v=product-lightbox-1"></script>
+</body>
+</html>

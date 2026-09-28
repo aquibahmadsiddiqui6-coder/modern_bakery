@@ -30,6 +30,12 @@ def home(request):
         is_active=True
     ).order_by("display_order")
 
+    cake_media = HomepageMedia.objects.filter(
+        section="cakes",
+        media_type="photo",
+        is_active=True
+    ).order_by("display_order")
+
     menu_categories = [
         {"slug": "all", "name": "All items", "icon": "✦", "hint": "The full counter"},
         {"slug": "cakes", "name": "Cakes", "icon": "🎂", "hint": "Celebration & cream cakes"},
@@ -39,6 +45,7 @@ def home(request):
         {"slug": "burgers", "name": "Burgers", "icon": "🍔", "hint": "Loaded savoury bites"},
         {"slug": "sandwiches", "name": "Sandwiches", "icon": "🥪", "hint": "Quick café classics"},
         {"slug": "snacks", "name": "Snacks", "icon": "🍟", "hint": "Savoury bakery snacks"},
+        {"slug": "namkeen", "name": "Namkeen", "icon": "🥨", "hint": "Crispy savoury favourites"},
         {"slug": "beverages", "name": "Tea & drinks", "icon": "☕", "hint": "Warm cups & cool sips"},
     ]
 
@@ -51,6 +58,36 @@ def home(request):
             "shop_media": shop_media,
             "product_media": product_media,
             "behind_media": behind_media,
+            "cake_media": cake_media,
             "menu_categories": menu_categories,
         }
+    )
+
+
+def pastries(request):
+
+    pastry_products = Product.objects.filter(
+        category="pastries",
+        is_available=True,
+    ).prefetch_related("images")
+
+    return render(
+        request,
+        "main/pastries.html",
+        {"pastry_products": pastry_products},
+    )
+
+
+def cakes(request):
+
+    cake_media = HomepageMedia.objects.filter(
+        section="cakes",
+        media_type="photo",
+        is_active=True,
+    ).order_by("display_order")
+
+    return render(
+        request,
+        "main/cakes.html",
+        {"cake_media": cake_media},
     )

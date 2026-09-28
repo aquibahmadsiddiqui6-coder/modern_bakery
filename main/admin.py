@@ -1,8 +1,9 @@
 from django.contrib import admin
-from .models import Product, HomepageMedia
+from .models import Product, ProductImage, HomepageMedia
 
 
 admin.site.register(Product)
+admin.site.register(ProductImage)
 admin.site.register(HomepageMedia)
 class ProductAdmin(admin.ModelAdmin):
 
