@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fresh Pastries | Modern Tea &amp; Modern Bakery</title>
+    <title>{{ category_label|title }} | Modern Tea &amp; Modern Bakery</title>
     <link rel="stylesheet" href="{% static 'main/style.css' %}?v=cake-gallery-1">
 </head>
 <body class="pastries-page">
@@ -27,22 +27,22 @@
 
     <main>
         <section class="pastries-hero">
-            <p class="section-label">FRESH FROM THE COUNTER</p>
-            <h1>Pastries made for the moment.</h1>
-            <p>Choose a favourite, then open its gallery to see every available finish and variation.</p>
+            <p class="section-label">{{ hero_label }}</p>
+            <h1>{{ hero_title }}</h1>
+            <p>{{ hero_description }}</p>
         </section>
 
         <section class="pastry-products" aria-labelledby="pastry-products-title">
             <div class="pastry-products-heading">
                 <div>
-                    <p class="section-label">PASTRIES</p>
-                    <h2 id="pastry-products-title">Pick your sweet favourite.</h2>
+                    <p class="section-label">{{ category_label }}</p>
+                    <h2 id="pastry-products-title">{{ section_title }}</h2>
                 </div>
                 <a class="secondary-btn" href="{% url 'home' %}#menu">Back to Menu</a>
             </div>
 
             <div class="pastry-product-grid">
-                {% for product in pastry_products %}
+                {% for product in category_products %}
                     <article class="pastry-product-card" data-reveal="menu-card">
                         <div class="pastry-product-image-wrap">
                             {% with gallery_count=product.images.count %}
@@ -87,7 +87,7 @@
                                         {% endif %}
                                     </div>
                                 {% else %}
-                                    <div class="pastry-product-placeholder" aria-hidden="true">🥐</div>
+                                    <div class="pastry-product-placeholder" aria-hidden="true">{{ placeholder_icon }}</div>
                                 {% endif %}
                             {% endwith %}
                         </div>
@@ -104,7 +104,7 @@
 
                     </article>
                 {% empty %}
-                    <p class="no-products">Our pastry counter is being prepared. Please check back soon.</p>
+                    <p class="no-products">{{ empty_message }}</p>
                 {% endfor %}
             </div>
         </section>

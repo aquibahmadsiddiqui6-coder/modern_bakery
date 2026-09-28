@@ -53,14 +53,14 @@
 
         <nav>
             <a href="#">Home</a>
-            <a href="#menu">Menu</a>
+            <a href="{% url 'menu' %}">Menu</a>
             <a href="#cake-gallery">Cakes</a>
             <a href="#about">About</a>
             <a href="#branches">Branches</a>
             <a href="#contact">Contact</a>
         </nav>
 
-        <a href="#menu" class="nav-button">Explore Menu</a>
+        <a href="{% url 'menu' %}" class="nav-button">Explore Menu</a>
 
     </header>
 
@@ -83,7 +83,7 @@
             </p>
 
             <div class="hero-buttons">
-                <a href="#menu" class="primary-btn">Explore Our Menu</a>
+                <a href="{% url 'menu' %}" class="primary-btn">Explore Our Menu</a>
                 <a href="#branches" class="secondary-btn">Find a Branch</a>
             </div>
 
@@ -135,7 +135,7 @@
             and bakery favourites, freshly displayed for you.
         </p>
 
-        <a href="#menu" class="primary-btn">
+                <a href="{% url 'menu' %}" class="primary-btn">
             Explore Our Menu
         </a>
 
@@ -338,15 +338,21 @@
 
     <div class="menu-catalog-head">
         <p>Browse the counter by category, then find your next favourite.</p>
+        {% if show_menu_items %}
         <span class="menu-count"><strong data-menu-count>{{ products|length }}</strong> items listed</span>
+        {% endif %}
     </div>
 
     <div class="menu-categories" role="tablist" aria-label="Menu categories">
         {% for category in menu_categories %}
-            {% if category.slug == "cakes" %}
+            {% if category.slug == "all" %}
+            <a class="menu-category menu-category-link{% if forloop.first %} is-active{% endif %}" href="{% url 'menu' %}">
+            {% elif category.slug == "cakes" %}
             <a class="menu-category menu-category-link" href="{% url 'cakes' %}">
             {% elif category.slug == "pastries" %}
             <a class="menu-category menu-category-link" href="{% url 'pastries' %}">
+            {% elif category.slug == "namkeen" %}
+            <a class="menu-category menu-category-link" href="{% url 'namkeen' %}">
             {% else %}
             <button
                 type="button"
@@ -361,7 +367,7 @@
                     <strong>{{ category.name }}</strong>
                     <small>{{ category.hint }}</small>
                 </span>
-            {% if category.slug == "cakes" or category.slug == "pastries" %}
+            {% if category.slug == "all" or category.slug == "cakes" or category.slug == "pastries" or category.slug == "namkeen" %}
             </a>
             {% else %}
             </button>
@@ -369,6 +375,7 @@
         {% endfor %}
     </div>
 
+    {% if show_menu_items %}
     <div class="menu-grid">
 
         {% if products %}
@@ -419,6 +426,7 @@
         <p>We are preparing this category for the counter. Check back soon or call us to ask what is available today.</p>
         <a href="#contact" class="secondary-btn">Ask the bakery</a>
     </div>
+    {% endif %}
 
 </section>
 

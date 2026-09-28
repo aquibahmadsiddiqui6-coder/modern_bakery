@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu | Modern Tea &amp; Modern Bakery</title>
+    <link rel="stylesheet" href="{% static 'main/style.css' %}?v=menu-page-1">
+</head>
+<body class="pastries-page">
+    <header class="navbar pastries-navbar">
+        <a class="logo" href="{% url 'home' %}">
+            <span>MODERN</span>
+            <small>TEA &amp; BAKERY</small>
+        </a>
+        <nav aria-label="Main navigation">
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'menu' %}" aria-current="page">Menu</a>
+            <a href="{% url 'cakes' %}">Cakes</a>
+            <a href="{% url 'home' %}#about">About</a>
+            <a href="{% url 'home' %}#contact">Contact</a>
+        </nav>
+        <a href="{% url 'home' %}#contact" class="nav-button">Order Enquiry</a>
+    </header>
+
+    <main>
+        <section class="pastries-hero">
+            <p class="section-label">OUR MENU</p>
+            <h1>Something for every craving.</h1>
+            <p>Browse every category, then choose a product from the full counter.</p>
+        </section>
+
+        <section class="menu menu-page-section" id="menu" data-reveal="section">
+            <div class="menu-catalog-head">
+                <p>Choose a category to open its dedicated page.</p>
+                <span class="menu-count"><strong>{{ products|length }}</strong> items listed</span>
+            </div>
+
+            <div class="menu-categories" role="tablist" aria-label="Menu categories">
+                {% for category in menu_categories %}
+                    {% if category.slug == "all" %}
+                    <a class="menu-category menu-category-link{% if forloop.first %} is-active{% endif %}" href="{% url 'menu' %}">
+                    {% elif category.slug == "cakes" %}
+                    <a class="menu-category menu-category-link" href="{% url 'cakes' %}">
+                    {% elif category.slug == "pastries" %}
+                    <a class="menu-category menu-category-link" href="{% url 'pastries' %}">
+                    {% elif category.slug == "namkeen" %}
+                    <a class="menu-category menu-category-link" href="{% url 'namkeen' %}">
+                    {% else %}
+                    <button type="button" class="menu-category{% if forloop.first %} is-active{% endif %}" data-menu-filter="{{ category.slug }}" role="tab" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}">
+                    {% endif %}
+                        <span class="menu-category-icon" aria-hidden="true">{{ category.icon }}</span>
+                        <span class="menu-category-copy">
+                            <strong>{{ category.name }}</strong>
+                            <small>{{ category.hint }}</small>
+                        </span>
+                    {% if category.slug == "all" or category.slug == "cakes" or category.slug == "pastries" or category.slug == "namkeen" %}
+                    </a>
+                    {% else %}
+                    </button>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <div class="menu-grid">
+                {% for product in products %}
+                    <article class="menu-card" data-reveal="menu-card" data-menu-category="{{ product.category }}">
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image" data-product-image>
+                        {% else %}
+                            <div class="menu-icon">🍰</div>
+                        {% endif %}
+                        <h3>{{ product.name }}</h3>
+                        <span class="product-category">{{ product.get_category_display }}</span>
+                        <p>{{ product.description }}</p>
+                        <div class="product-card-footer">
+                            <div class="product-price">₹{{ product.price }}</div>
+                            <a href="{% url 'home' %}#contact" class="product-order-link">Enquire <span aria-hidden="true">↗</span></a>
+                        </div>
+                    </article>
+                {% empty %}
+                    <p class="no-products">Our delicious menu is being prepared. Please check back soon.</p>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div>
+            <h3>MODERN TEA &amp; MODERN BAKERY</h3>
+            <p>Since 1960</p>
+        </div>
+        <p>Freshly made for Lucknow.</p>
+    </footer>
+    <script type="module" src="{% static 'main/motion.js' %}?v=menu-page-1"></script>
+    <script src="{% static 'main/lightbox.js' %}?v=product-lightbox-1"></script>
+</body>
+</html>
