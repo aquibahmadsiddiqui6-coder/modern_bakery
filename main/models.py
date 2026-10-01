@@ -6,7 +6,9 @@ class Product(models.Model):
     CATEGORY_CHOICES = [
         ("cakes", "Cakes"),
         ("pastries", "Pastries"),
+        ("pancakes", "Pancakes"),
         ("biscuits", "Biscuits & Cookies"),
+        ("sandwiches", "Sandwiches"),
         ("snacks", "Bakery Snacks"),
         ("namkeen", "Namkeen"),
         ("beverages", "Tea & Beverages"),

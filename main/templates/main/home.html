@@ -351,8 +351,16 @@
             <a class="menu-category menu-category-link" href="{% url 'cakes' %}">
             {% elif category.slug == "pastries" %}
             <a class="menu-category menu-category-link" href="{% url 'pastries' %}">
+            {% elif category.slug == "pancakes" %}
+            <a class="menu-category menu-category-link" href="{% url 'pancakes' %}">
+            {% elif category.slug == "sandwiches" %}
+            <a class="menu-category menu-category-link" href="{% url 'sandwiches' %}">
             {% elif category.slug == "namkeen" %}
             <a class="menu-category menu-category-link" href="{% url 'namkeen' %}">
+            {% elif category.slug == "snacks" %}
+            <a class="menu-category menu-category-link" href="{% url 'snacks' %}">
+            {% elif category.slug == "biscuits" %}
+            <a class="menu-category menu-category-link" href="{% url 'cookies' %}">
             {% else %}
             <button
                 type="button"
@@ -367,7 +375,7 @@
                     <strong>{{ category.name }}</strong>
                     <small>{{ category.hint }}</small>
                 </span>
-            {% if category.slug == "all" or category.slug == "cakes" or category.slug == "pastries" or category.slug == "namkeen" %}
+            {% if category.slug == "all" or category.slug == "cakes" or category.slug == "pastries" or category.slug == "pancakes" or category.slug == "sandwiches" or category.slug == "namkeen" or category.slug == "snacks" or category.slug == "biscuits" %}
             </a>
             {% else %}
             </button>

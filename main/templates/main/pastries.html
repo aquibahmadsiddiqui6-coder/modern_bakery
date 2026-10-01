@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ category_label|title }} | Modern Tea &amp; Modern Bakery</title>
-    <link rel="stylesheet" href="{% static 'main/style.css' %}?v=cake-gallery-1">
+    <link rel="stylesheet" href="{% static 'main/style.css' %}?v=pastry-hero-3">
 </head>
 <body class="pastries-page">
 
@@ -27,9 +27,16 @@
 
     <main>
         <section class="pastries-hero">
-            <p class="section-label">{{ hero_label }}</p>
-            <h1>{{ hero_title }}</h1>
-            <p>{{ hero_description }}</p>
+            <div class="pastries-hero-copy">
+                <p class="section-label">{{ hero_label }}</p>
+                <h1>{{ hero_title }}</h1>
+                <p>{{ hero_description }}</p>
+            </div>
+            {% if hero_image %}
+                <div class="pastries-hero-image" aria-hidden="true">
+                    <img src="{{ hero_image }}" alt="">
+                </div>
+            {% endif %}
         </section>
 
         <section class="pastry-products" aria-labelledby="pastry-products-title">
