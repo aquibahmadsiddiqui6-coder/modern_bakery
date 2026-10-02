@@ -8,13 +8,15 @@ def get_menu_categories():
         {"slug": "cakes", "name": "Cakes", "icon": "🎂", "hint": "Celebration & cream cakes"},
         {"slug": "pastries", "name": "Pastries", "icon": "🥐", "hint": "Fresh individual treats"},
         {"slug": "pancakes", "name": "Pancakes", "icon": "🥞", "hint": "Fluffy sweet favourites"},
+        {"slug": "breads_buns", "name": "Breads & Buns", "icon": "🍞", "hint": "Fresh breads & bakery buns"},
         {"slug": "biscuits", "name": "Cookies", "icon": "🍪", "hint": "Biscuits & tea-time bites"},
         {"slug": "pizza", "name": "Pizza", "icon": "🍕", "hint": "Hot, cheesy favourites"},
         {"slug": "burgers", "name": "Burgers", "icon": "🍔", "hint": "Loaded savoury bites"},
         {"slug": "sandwiches", "name": "Sandwiches", "icon": "🥪", "hint": "Quick café classics"},
-        {"slug": "snacks", "name": "Snacks", "icon": "🍟", "hint": "Savoury bakery snacks"},
+        {"slug": "snacks", "name": "Snacks & Patties", "icon": "🍟", "hint": "Savoury bakery snacks & patties"},
         {"slug": "namkeen", "name": "Namkeen", "icon": "🥨", "hint": "Crispy savoury favourites"},
         {"slug": "beverages", "name": "Tea & drinks", "icon": "☕", "hint": "Warm cups & cool sips"},
+        {"slug": "gifts", "name": "Gifts & Hampers", "icon": "🎁", "hint": "Thoughtful bakery gifting"},
     ]
 
 
@@ -127,6 +129,29 @@ def pancakes(request):
     )
 
 
+def breads_buns(request):
+
+    bread_products = Product.objects.filter(
+        category="breads_buns",
+        is_available=True,
+    ).prefetch_related("images")
+
+    return render(
+        request,
+        "main/pastries.html",
+        {
+            "category_products": bread_products,
+            "category_label": "BREADS & BUNS",
+            "hero_label": "FRESH FROM THE COUNTER",
+            "hero_title": "Fresh breads, soft buns.",
+            "hero_description": "Explore our everyday breads and bakery buns, freshly prepared for every meal and tea break.",
+            "section_title": "Pick your bakery favourite.",
+            "empty_message": "Our bread counter is being prepared. Please check back soon.",
+            "placeholder_icon": "🍞",
+        },
+    )
+
+
 def namkeen(request):
 
     namkeen_products = Product.objects.filter(
@@ -167,6 +192,7 @@ def snacks(request):
             "hero_label": "FRESH FROM THE COUNTER",
             "hero_title": "Savoury favourites for every craving.",
             "hero_description": "Explore freshly made bakery snacks, then open a product photo to see it up close.",
+            "hero_image": "/media/hero/snacks-hero.jpg",
             "section_title": "Pick your savoury favourite.",
             "empty_message": "Our snack counter is being prepared. Please check back soon.",
             "placeholder_icon": "🍟",
@@ -198,6 +224,30 @@ def sandwiches(request):
     )
 
 
+def burgers(request):
+
+    burger_products = Product.objects.filter(
+        category="burgers",
+        is_available=True,
+    ).prefetch_related("images")
+
+    return render(
+        request,
+        "main/pastries.html",
+        {
+            "category_products": burger_products,
+            "category_label": "BURGERS",
+            "hero_label": "FRESH FROM THE COUNTER",
+            "hero_title": "Fresh burgers, made to order.",
+            "hero_description": "Explore our burger selection, then open a product photo to see every delicious detail.",
+            "hero_image": "/media/hero/burgers-hero.jpg",
+            "section_title": "Pick your burger favourite.",
+            "empty_message": "Our burger counter is being prepared. Please check back soon.",
+            "placeholder_icon": "🍔",
+        },
+    )
+
+
 def cookies(request):
 
     cookie_products = Product.objects.filter(
@@ -218,6 +268,54 @@ def cookies(request):
             "section_title": "Pick your tea-time favourite.",
             "empty_message": "Our cookie counter is being prepared. Please check back soon.",
             "placeholder_icon": "🍪",
+        },
+    )
+
+
+def gifts(request):
+
+    gift_products = Product.objects.filter(
+        category="gifts",
+        is_available=True,
+    ).prefetch_related("images")
+
+    return render(
+        request,
+        "main/pastries.html",
+        {
+            "category_products": gift_products,
+            "category_label": "GIFTS & HAMPERS",
+            "hero_label": "MADE TO GIVE",
+            "hero_title": "Beautiful bakery gifts for every occasion.",
+            "hero_description": "Explore our gifting collection, thoughtfully prepared for sharing, celebrating, and saying thank you.",
+            "hero_image": "/media/hero/gifts-hero.jpg",
+            "section_title": "Choose a thoughtful gift.",
+            "empty_message": "Our gifting collection is being prepared. Please check back soon.",
+            "placeholder_icon": "🎁",
+        },
+    )
+
+
+def tea(request):
+
+    tea_products = Product.objects.filter(
+        category="beverages",
+        is_available=True,
+    ).prefetch_related("images")
+
+    return render(
+        request,
+        "main/pastries.html",
+        {
+            "category_products": tea_products,
+            "category_label": "TEA & DRINKS",
+            "hero_label": "FROM THE TEA COUNTER",
+            "hero_title": "Warm blends for every pause.",
+            "hero_description": "Explore our tea and beverage selection, prepared to bring a little warmth to every break.",
+            "hero_image": "/media/hero/tea-hero.jpg",
+            "section_title": "Pick your tea favourite.",
+            "empty_message": "Our tea counter is being prepared. Please check back soon.",
+            "placeholder_icon": "☕",
         },
     )
 

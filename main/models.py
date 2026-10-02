@@ -7,11 +7,14 @@ class Product(models.Model):
         ("cakes", "Cakes"),
         ("pastries", "Pastries"),
         ("pancakes", "Pancakes"),
+        ("breads_buns", "Breads & Buns"),
         ("biscuits", "Biscuits & Cookies"),
         ("sandwiches", "Sandwiches"),
+        ("burgers", "Burgers"),
         ("snacks", "Bakery Snacks"),
         ("namkeen", "Namkeen"),
         ("beverages", "Tea & Beverages"),
+        ("gifts", "Gifts & Hampers"),
     ]
 
     name = models.CharField(max_length=150)

@@ -46,14 +46,22 @@
                     <a class="menu-category menu-category-link" href="{% url 'pastries' %}">
                     {% elif category.slug == "pancakes" %}
                     <a class="menu-category menu-category-link" href="{% url 'pancakes' %}">
+                    {% elif category.slug == "breads_buns" %}
+                    <a class="menu-category menu-category-link" href="{% url 'breads_buns' %}">
                     {% elif category.slug == "sandwiches" %}
                     <a class="menu-category menu-category-link" href="{% url 'sandwiches' %}">
+                    {% elif category.slug == "burgers" %}
+                    <a class="menu-category menu-category-link" href="{% url 'burgers' %}">
                     {% elif category.slug == "namkeen" %}
                     <a class="menu-category menu-category-link" href="{% url 'namkeen' %}">
                     {% elif category.slug == "snacks" %}
                     <a class="menu-category menu-category-link" href="{% url 'snacks' %}">
                     {% elif category.slug == "biscuits" %}
                     <a class="menu-category menu-category-link" href="{% url 'cookies' %}">
+                    {% elif category.slug == "gifts" %}
+                    <a class="menu-category menu-category-link" href="{% url 'gifts' %}">
+                    {% elif category.slug == "beverages" %}
+                    <a class="menu-category menu-category-link" href="{% url 'tea' %}">
                     {% else %}
                     <button type="button" class="menu-category{% if forloop.first %} is-active{% endif %}" data-menu-filter="{{ category.slug }}" role="tab" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}">
                     {% endif %}
@@ -62,7 +70,7 @@
                             <strong>{{ category.name }}</strong>
                             <small>{{ category.hint }}</small>
                         </span>
-                    {% if category.slug == "all" or category.slug == "cakes" or category.slug == "pastries" or category.slug == "pancakes" or category.slug == "sandwiches" or category.slug == "namkeen" or category.slug == "snacks" or category.slug == "biscuits" %}
+                    {% if category.slug == "all" or category.slug == "cakes" or category.slug == "pastries" or category.slug == "pancakes" or category.slug == "breads_buns" or category.slug == "sandwiches" or category.slug == "burgers" or category.slug == "namkeen" or category.slug == "snacks" or category.slug == "biscuits" or category.slug == "gifts" or category.slug == "beverages" %}
                     </a>
                     {% else %}
                     </button>
