@@ -1,0 +1,11 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Checkout | Modern Tea &amp; Modern Bakery</title><link rel="stylesheet" href="{% static 'main/style.css' %}?v=ordering-1"></head>
+<body class="pastries-page order-page">
+    <header class="navbar pastries-navbar"><a class="logo" href="{% url 'home' %}"><span>MODERN</span><small>TEA &amp; BAKERY</small></a><nav aria-label="Main navigation"><a href="{% url 'menu' %}">Menu</a><a href="{% url 'home' %}#about">About</a><a href="{% url 'home' %}#contact">Contact</a></nav><a href="{% url 'cart' %}" class="nav-button">Back to order</a></header>
+    <main class="order-shell"><div class="order-heading"><p class="section-label">CHECKOUT</p><h1>Tell us where to bring it.</h1><p>We will confirm your order and delivery details by phone.</p></div>
+        {% if form_error %}<p class="form-error">{{ form_error }}</p>{% endif %}
+        <div class="checkout-layout"><form method="post" class="checkout-form">{% csrf_token %}<label>Name<input type="text" name="customer_name" required autocomplete="name"></label><label>Phone<input type="tel" name="phone" required autocomplete="tel"></label><label>Email <span>(optional)</span><input type="email" name="email" autocomplete="email"></label><label>Delivery address<textarea name="address" rows="4" required autocomplete="street-address"></textarea></label><label>Notes <span>(optional)</span><textarea name="notes" rows="3" placeholder="Any timing or packing requests?"></textarea></label><button type="submit" class="primary-btn">Place order · ₹{{ cart_total }}</button></form><aside class="order-summary checkout-summary"><p class="section-label">ORDER SUMMARY</p>{% for row in cart_rows %}<div class="summary-line"><span>{{ row.product.name }} × {{ row.quantity }}</span><strong>₹{{ row.line_total }}</strong></div>{% endfor %}<hr><div class="summary-line summary-total"><span>Total</span><strong>₹{{ cart_total }}</strong></div></aside></div>
+    </main><footer><div><h3>MODERN TEA &amp; MODERN BAKERY</h3><p>Since 1960</p></div><p>Freshly made for Lucknow.</p></footer>
+</body></html>

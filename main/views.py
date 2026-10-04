@@ -1,5 +1,115 @@
-from django.shortcuts import render
-from .models import Product, HomepageMedia
+from decimal import Decimal
+
+from django.contrib import messages
+from django.db import transaction
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_POST
+
+from .models import HomepageMedia, Order, OrderItem, Product
+
+
+def _cart_products(request):
+    raw_cart = request.session.get("cart", {})
+    product_ids = [int(product_id) for product_id in raw_cart]
+    products = Product.objects.filter(id__in=product_ids, is_available=True)
+    product_map = {str(product.id): product for product in products}
+    rows = []
+    total = Decimal("0")
+    for product_id, quantity in raw_cart.items():
+        product = product_map.get(str(product_id))
+        if not product:
+            continue
+        quantity = max(1, min(int(quantity), 99))
+        line_total = product.price * quantity
+        rows.append({"product": product, "quantity": quantity, "line_total": line_total})
+        total += line_total
+    return rows, total
+
+
+def cart(request):
+    rows, total = _cart_products(request)
+    return render(request, "main/cart.html", {"cart_rows": rows, "cart_total": total})
+
+
+@require_POST
+def add_to_cart(request):
+    product = get_object_or_404(Product, pk=request.POST.get("product_id"), is_available=True)
+    cart_items = request.session.get("cart", {})
+    product_id = str(product.id)
+    cart_items[product_id] = min(int(cart_items.get(product_id, 0)) + 1, 99)
+    request.session["cart"] = cart_items
+    messages.success(request, f"{product.name} added to your order.")
+    return redirect(request.POST.get("next") or "cart")
+
+
+@require_POST
+def update_cart(request):
+    cart_items = request.session.get("cart", {})
+    for product_id in list(cart_items):
+        key = f"quantity_{product_id}"
+        if key not in request.POST:
+            continue
+        try:
+            quantity = int(request.POST[key])
+        except (TypeError, ValueError):
+            quantity = 1
+        if quantity <= 0:
+            cart_items.pop(product_id, None)
+        else:
+            cart_items[product_id] = min(quantity, 99)
+    request.session["cart"] = cart_items
+    messages.success(request, "Your order was updated.")
+    return redirect("cart")
+
+
+@require_POST
+def remove_from_cart(request):
+    cart_items = request.session.get("cart", {})
+    cart_items.pop(str(request.POST.get("product_id")), None)
+    request.session["cart"] = cart_items
+    return redirect("cart")
+
+
+def checkout(request):
+    rows, total = _cart_products(request)
+    if not rows:
+        messages.info(request, "Your order is empty. Add something from the menu first.")
+        return redirect("menu")
+    if request.method == "POST":
+        customer_name = request.POST.get("customer_name", "").strip()
+        phone = request.POST.get("phone", "").strip()
+        email = request.POST.get("email", "").strip()
+        address = request.POST.get("address", "").strip()
+        notes = request.POST.get("notes", "").strip()
+        if not customer_name or not phone or not address:
+            return render(request, "main/checkout.html", {"cart_rows": rows, "cart_total": total, "form_error": "Please enter your name, phone number, and address."})
+        with transaction.atomic():
+            order = Order.objects.create(
+                customer_name=customer_name,
+                phone=phone,
+                email=email,
+                address=address,
+                notes=notes,
+                total=total,
+            )
+            OrderItem.objects.bulk_create([
+                OrderItem(
+                    order=order,
+                    product=row["product"],
+                    product_name=row["product"].name,
+                    unit_price=row["product"].price,
+                    quantity=row["quantity"],
+                )
+                for row in rows
+            ])
+        request.session["cart"] = {}
+        return redirect("order_success", order_id=order.id)
+    return render(request, "main/checkout.html", {"cart_rows": rows, "cart_total": total})
+
+
+def order_success(request, order_id):
+    order = get_object_or_404(Order.objects.prefetch_related("items"), pk=order_id)
+    return render(request, "main/order_success.html", {"order": order})
 
 
 def get_menu_categories():

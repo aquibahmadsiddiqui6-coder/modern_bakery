@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Order | Modern Tea &amp; Modern Bakery</title>
+    <link rel="stylesheet" href="{% static 'main/style.css' %}?v=ordering-1">
+</head>
+<body class="pastries-page order-page">
+    <header class="navbar pastries-navbar">
+        <a class="logo" href="{% url 'home' %}"><span>MODERN</span><small>TEA &amp; BAKERY</small></a>
+        <nav aria-label="Main navigation">
+            <a href="{% url 'menu' %}">Menu</a>
+            <a href="{% url 'home' %}#about">About</a>
+            <a href="{% url 'home' %}#contact">Contact</a>
+        </nav>
+        <a href="{% url 'cart' %}" class="nav-button">Your order{% if cart_count %} ({{ cart_count }}){% endif %}</a>
+    </header>
+
+    <main class="order-shell">
+        <div class="order-heading">
+            <p class="section-label">YOUR ORDER</p>
+            <h1>Ready when you are.</h1>
+            <p>Review your favourites, then share your details and we will prepare your order.</p>
+        </div>
+        {% if messages %}
+            <div class="order-messages">{% for message in messages %}<p>{{ message }}</p>{% endfor %}</div>
+        {% endif %}
+        {% if cart_rows %}
+            <form method="post" action="{% url 'update_cart' %}" class="order-layout">
+                {% csrf_token %}
+                <section class="order-items" aria-labelledby="order-items-title">
+                    <h2 id="order-items-title">Your favourites</h2>
+                    {% for row in cart_rows %}
+                        <article class="order-item">
+                            <div><span class="product-category">{{ row.product.get_category_display }}</span><h3>{{ row.product.name }}</h3><p>₹{{ row.product.price }} each</p></div>
+                            <div class="order-item-actions"><label for="quantity-{{ row.product.id }}">Qty</label><input id="quantity-{{ row.product.id }}" type="number" name="quantity_{{ row.product.id }}" min="0" max="99" value="{{ row.quantity }}"><strong>₹{{ row.line_total }}</strong><button type="submit" formaction="{% url 'remove_from_cart' %}" name="product_id" value="{{ row.product.id }}" class="remove-link">Remove</button></div>
+                        </article>
+                    {% endfor %}
+                    <button type="submit" class="secondary-btn">Update order</button>
+                </section>
+                <aside class="order-summary"><p class="section-label">ORDER SUMMARY</p><h2>₹{{ cart_total }}</h2><p>Taxes and delivery details will be confirmed by the bakery.</p><a class="primary-btn" href="{% url 'checkout' %}">Continue to checkout</a></aside>
+            </form>
+        {% else %}
+            <section class="empty-order"><span aria-hidden="true">✦</span><h2>Your order is empty.</h2><p>Choose something from the counter and it will appear here.</p><a class="primary-btn" href="{% url 'menu' %}">Browse the menu</a></section>
+        {% endif %}
+    </main>
+    <footer><div><h3>MODERN TEA &amp; MODERN BAKERY</h3><p>Since 1960</p></div><p>Freshly made for Lucknow.</p></footer>
+</body>
+</html>

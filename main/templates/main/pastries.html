@@ -22,7 +22,7 @@
             <a href="{% url 'home' %}#contact">Contact</a>
         </nav>
 
-        <a href="{% url 'home' %}#contact" class="nav-button">Order Enquiry</a>
+        <a href="{% url 'cart' %}" class="nav-button">Your order{% if cart_count %} ({{ cart_count }}){% endif %}</a>
     </header>
 
     <main>
@@ -105,7 +105,12 @@
                             <p>{{ product.description }}</p>
                             <div class="pastry-product-footer">
                                 <strong>₹{{ product.price }}</strong>
-                                <a href="{% url 'home' %}#contact" class="product-order-link">Enquire <span aria-hidden="true">↗</span></a>
+                                <form method="post" action="{% url 'add_to_cart' %}" class="add-to-cart-form">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                                    <input type="hidden" name="next" value="{{ request.path }}">
+                                    <button type="submit" class="product-order-link">Add to order <span aria-hidden="true">+</span></button>
+                                </form>
                             </div>
                         </div>
 
