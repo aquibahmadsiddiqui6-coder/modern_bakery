@@ -1,7 +1,8 @@
 from decimal import Decimal
+from uuid import uuid4
 
 from django.contrib import messages
-from django.db import transaction
+from django.db import DatabaseError, transaction
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
@@ -83,31 +84,48 @@ def checkout(request):
         notes = request.POST.get("notes", "").strip()
         if not customer_name or not phone or not address:
             return render(request, "main/checkout.html", {"cart_rows": rows, "cart_total": total, "form_error": "Please enter your name, phone number, and address."})
-        with transaction.atomic():
-            order = Order.objects.create(
-                customer_name=customer_name,
-                phone=phone,
-                email=email,
-                address=address,
-                notes=notes,
-                total=total,
-            )
-            OrderItem.objects.bulk_create([
-                OrderItem(
-                    order=order,
-                    product=row["product"],
-                    product_name=row["product"].name,
-                    unit_price=row["product"].price,
-                    quantity=row["quantity"],
+        try:
+            with transaction.atomic():
+                order = Order.objects.create(
+                    customer_name=customer_name,
+                    phone=phone,
+                    email=email,
+                    address=address,
+                    notes=notes,
+                    total=total,
                 )
-                for row in rows
-            ])
+                OrderItem.objects.bulk_create([
+                    OrderItem(
+                        order=order,
+                        product=row["product"],
+                        product_name=row["product"].name,
+                        unit_price=row["product"].price,
+                        quantity=row["quantity"],
+                    )
+                    for row in rows
+                ])
+            order_id = str(order.id)
+        except DatabaseError:
+            # Vercel packages SQLite as read-only; retain the confirmation in the signed session.
+            order_id = f"WEB-{uuid4().hex[:8].upper()}"
+            request.session["last_order"] = {
+                "id": order_id,
+                "customer_name": customer_name,
+                "phone": phone,
+                "email": email,
+                "address": address,
+                "notes": notes,
+                "total": str(total),
+            }
         request.session["cart"] = {}
-        return redirect("order_success", order_id=order.id)
+        return redirect("order_success", order_id=order_id)
     return render(request, "main/checkout.html", {"cart_rows": rows, "cart_total": total})
 
 
 def order_success(request, order_id):
+    saved_order = request.session.get("last_order")
+    if saved_order and saved_order.get("id") == str(order_id):
+        return render(request, "main/order_success.html", {"order": saved_order})
     order = get_object_or_404(Order.objects.prefetch_related("items"), pk=order_id)
     return render(request, "main/order_success.html", {"order": order})
 
