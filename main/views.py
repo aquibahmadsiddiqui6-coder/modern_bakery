@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
 from .models import HomepageMedia, Order, OrderItem, Product
+from .notifications import send_order_notifications
 
 
 def _cart_products(request):
@@ -118,6 +119,7 @@ def checkout(request):
                 "total": str(total),
             }
         request.session["cart"] = {}
+        send_order_notifications(order_id, customer_name, phone, email, rows, total)
         return redirect("order_success", order_id=order_id)
     return render(request, "main/checkout.html", {"cart_rows": rows, "cart_total": total})
 
