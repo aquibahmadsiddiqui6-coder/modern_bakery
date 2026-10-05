@@ -53,7 +53,7 @@ def send_order_notifications(order_id, customer_name, customer_phone, customer_e
         logger.info("Order %s notifications skipped: BREVO_API_KEY is not configured", order_id)
         return
 
-    owner_email = os.environ.get("ORDER_NOTIFICATION_EMAIL", "").strip()
+    owner_email = os.environ.get("ORDER_NOTIFICATION_EMAIL", "aquibahmadsiddiqui6@gmail.com").strip()
     owner_phone = _phone(os.environ.get("ORDER_NOTIFICATION_PHONE", "8127442301"))
     sender_email = os.environ.get("BREVO_SENDER_EMAIL", "").strip()
     sender_name = os.environ.get("BREVO_SENDER_NAME", "Modern Tea & Bakery").strip()
