@@ -83,8 +83,8 @@ def checkout(request):
         email = request.POST.get("email", "").strip()
         address = request.POST.get("address", "").strip()
         notes = request.POST.get("notes", "").strip()
-        if not customer_name or not phone or not address:
-            return render(request, "main/checkout.html", {"cart_rows": rows, "cart_total": total, "form_error": "Please enter your name, phone number, and address."})
+        if not customer_name or not phone or not email or not address:
+            return render(request, "main/checkout.html", {"cart_rows": rows, "cart_total": total, "form_error": "Please enter your name, email, phone number, and address."})
         try:
             with transaction.atomic():
                 order = Order.objects.create(
